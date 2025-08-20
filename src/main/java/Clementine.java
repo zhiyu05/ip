@@ -1,66 +1,100 @@
 import java.util.Scanner;
 public class Clementine {
-    private static String[] tasks = new String[100];
+    private static Task[] tasks = new Task[100];
     private static int taskCount = 0;
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println(line());
-        System.out.println(intro());
-        System.out.println(line());
+        intro();
         while(scanner.hasNextLine()) {
             String input = scanner.nextLine();
 
             if (input.equals("bye")) {
-                System.out.println(line());
-                System.out.println(outro());
-                System.out.println(line());
+                outro();
                 break;
             } else if (input.equals("list")) {
-                System.out.println(line());
-                System.out.println(listTasks(tasks));
-                System.out.println(line());
+                listTasks();
+            } else if (input.startsWith("mark ")) {
+                markTask(input);
+            } else if (input.startsWith("unmark ")){
+                unmarkTask(input);
             } else {
-                System.out.println(line());
-                System.out.println(addTask(input, tasks));
-                System.out.println(line());
+                addTask(input);
             }
         }
         scanner.close();
     }
 
-    public static String intro () {
-        return "Quack! I'm clementine\n What can i help you with today?\n";
+    public static void intro () {
+        line();
+        System.out.println("Quack! I'm clementine\n What can i help you with today?\n");
+        line();
     }
 
-    public static String outro () {
-        System.out.println(line());
+    public static void outro () {
+        line();
         System.out.println("Bye! quack u later! hope you have a great day!");
-        System.out.println(line());
-        return "Bye! quack u later! hope you have a great day!";
+        line();
     }
 
-    public static String line() {
-        return "______________________________________________\n";
+    public static void line() {
+        System.out.println( "______________________________________________\n");
     }
 
-    public static String addTask (String task, String[] tasks) {
-        tasks[taskCount] = task;
-        String response = "okay! added: " + task + " quack!";
+    public static void addTask (String taskDescription) {
+        tasks[taskCount] = new Task(taskDescription);
+        String response = "okay! added: " + taskDescription + " quack!";
         taskCount++;
-        return response;
+        line();
+        System.out.println(response);
+        line();
     }
 
-    public static String listTasks (String[] tasks) {
-        String response = "";
+    public static void listTasks () {
+        String response = "tasks to be done before freedom:\n";
         for (int i = 1; i <= taskCount; i++) {
-            response += i + ". " + tasks[i - 1] + "\n";
+            response += i + ". " + tasks[i - 1].printTask() + "\n";
         }
-        return response;
+        line();
+        System.out.println(response);
+        line();
     }
 
-    public static Boolean isListCommand (String response) {
-        return response.equals("list");
+    public static void markTask(String input) {
+        try{
+            String numberPart = input.substring(5);
+            int taskNumber = Integer.parseInt(numberPart);
+
+            if (taskNumber >= 1 && taskNumber <= taskCount) {
+                tasks[taskNumber - 1].taskDone();
+                line();
+                System.out.println("good job! you've completed the task");
+                System.out.println(" " + tasks[taskNumber - 1].printTask());
+                line();
+            } else {
+                System.out.println("invalid task number!");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("please provide a valid number");
+        }
     }
 
+    public static void unmarkTask(String input) {
+        try {
+            String numberPart = input.substring(7);
+            int taskNumber = Integer.parseInt(numberPart);
+
+            if (taskNumber >= 1 && taskNumber <= taskCount) {
+                tasks[taskNumber - 1].taskUndone();
+                line();
+                System.out.println("okay, ive changed this task to not done. quack!");
+                System.out.println(" " + tasks[taskNumber - 1].printTask());
+                line();
+            } else {
+                System.out.println("invalid task number");
+            }
+        } catch (NumberFormatException e) {
+            System.out.println("please provide a valid number");
+        }
+    }
 }
