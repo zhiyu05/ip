@@ -1,7 +1,9 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+
 public class Clementine {
-    private static Task[] tasks = new Task[100];
-    private static int taskCount = 0;
+
+    private static ArrayList<Task> tasks = new ArrayList<>();
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -39,6 +41,8 @@ public class Clementine {
             addDeadlineTask(input);
         } else if (input.startsWith("todo")) {
             addTask(input);
+        } else if (input.startsWith("delete")) {
+            deleteTask(input);
         } else {
             throw new ClementineException("quack quack! i don't recognise this word!");
         }
@@ -60,7 +64,7 @@ public class Clementine {
     }
 
     public static void addTask (String taskDescription) throws ClementineException {
-        if (taskCount >= 100) {
+        if (tasks.size() >= 100) {
             throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
         }
         String cleanDescription;
@@ -77,20 +81,19 @@ public class Clementine {
         }
 
         Task task = new Todo(cleanDescription);
-        tasks[taskCount] = task;
+        tasks.add(task);
         String response = "okay! ive added the task quack!";
-        taskCount++;
         line();
         System.out.println(response);
         System.out.println(" " + task.toString());
-        System.out.println("now you have " + taskCount + " remaining tasks!");
+        System.out.println("now you have " + tasks.size() + " remaining tasks!");
         line();
     }
 
     public static void listTasks () {
         String response = "tasks to be done before freedom:\n";
-        for (int i = 1; i <= taskCount; i++) {
-            response += i + ". " + tasks[i - 1].toString() + "\n";
+        for (int i = 0; i < tasks.size(); i++) {
+            response += (i + 1) + ". " + tasks.get(i).toString() + "\n";
         }
         line();
         System.out.println(response);
@@ -98,7 +101,7 @@ public class Clementine {
     }
 
     public static void markTask(String input) throws ClementineException{
-        if (taskCount == 0) {
+        if (tasks.size() == 0) {
             throw new ClementineException ("quack! u dont have any tasks yet!");
         }
 
@@ -110,11 +113,11 @@ public class Clementine {
             String numberPart = input.substring(5);
             int taskNumber = Integer.parseInt(numberPart);
 
-            if (taskNumber >= 1 && taskNumber <= taskCount) {
-                tasks[taskNumber - 1].taskDone();
+            if (taskNumber >= 1 && taskNumber <= tasks.size()) {
+                tasks.get(taskNumber - 1).taskDone();
                 line();
                 System.out.println("good job! you've completed the task");
-                System.out.println(" " + tasks[taskNumber - 1].toString());
+                System.out.println(" " + tasks.get(taskNumber - 1).toString());
                 line();
             } else {
                 throw new ClementineException("invalid task number!");
@@ -125,7 +128,7 @@ public class Clementine {
     }
 
     public static void unmarkTask(String input) throws ClementineException{
-        if (taskCount == 0) {
+        if (tasks.size() == 0) {
             throw new ClementineException ("quack! u dont have any tasks yet!");
         }
 
@@ -137,11 +140,11 @@ public class Clementine {
             String numberPart = input.substring(7);
             int taskNumber = Integer.parseInt(numberPart);
 
-            if (taskNumber >= 1 && taskNumber <= taskCount) {
-                tasks[taskNumber - 1].taskUndone();
+            if (taskNumber >= 1 && taskNumber <= tasks.size()) {
+                tasks.get(taskNumber - 1).taskUndone();
                 line();
                 System.out.println("okay, ive changed this task to not done. quack!");
-                System.out.println(" " + tasks[taskNumber - 1].toString());
+                System.out.println(" " + tasks.get(taskNumber - 1).toString());
                 line();
             } else {
                 throw new ClementineException("invalid task number");
@@ -152,7 +155,7 @@ public class Clementine {
     }
 
     public static void addDeadlineTask(String input) throws ClementineException{
-        if (taskCount >= 100) {
+        if (tasks.size() >= 100) {
             throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
         }
         if (input.equals("deadline")) {
@@ -176,13 +179,12 @@ public class Clementine {
             }
 
             Task task = new Deadline(description, deadline);
-            tasks[taskCount] = task;
+            tasks.add(task);
             String response = "okay! ive added the deadline task quack!";
-            taskCount++;
             line();
             System.out.println(response);
             System.out.println(" " + task.toString());
-            System.out.println("now you have " + taskCount + " remaining tasks!");
+            System.out.println("now you have " + tasks.size() + " remaining tasks!");
             line();
         } else {
             throw new ClementineException("quack! please use the format: deadline <description> /by <date>");
@@ -190,7 +192,7 @@ public class Clementine {
     }
 
     public static void addEventTask (String input) throws ClementineException{
-        if (taskCount >= 100) {
+        if (tasks.size() >= 100) {
             throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
         }
         if (input.equals("event")) {
@@ -216,18 +218,45 @@ public class Clementine {
                 }
 
                 Task task = new Event(description, startTime, endTime);
-                tasks[taskCount] = task;
-                taskCount++;
+                tasks.add(task);
                 line();
                 System.out.println("okay! ive added the event task for u! quack!");
                 System.out.println(" " + task.toString());
-                System.out.println("now you have " + taskCount + " remaining tasks!");
+                System.out.println("now you have " + tasks.size() + " remaining tasks!");
                 line();
             } else {
                 throw new ClementineException("quack! please use the format: event <description> /from <time> /to <time>");
             }
         } else {
             throw new ClementineException("please use correct format for event task!");
+        }
+    }
+
+    public static void deleteTask (String input) throws ClementineException{
+        if (input.equals("delete")) {
+            throw new ClementineException("please specify a number!");
+        }
+
+        if (tasks.size() == 0) {
+            throw new ClementineException("quack! you dont have any tasks to delete!");
+        }
+
+        try {
+            String numberPart = input.substring(7);
+            int taskNumber = Integer.parseInt(numberPart);
+
+            if (taskNumber >= 1 && taskNumber <= tasks.size()) {
+                Task deletedTask = tasks.remove(taskNumber - 1);
+                line();
+                System.out.println("quack! ive deleted this task for you :)");
+                System.out.println(" " + deletedTask.toString());
+                System.out.println("now you have " + tasks.size() + " remaining tasks");
+                line();
+            } else {
+                throw new ClementineException("invalid task number!");
+            }
+        } catch (NumberFormatException e) {
+            throw new ClementineException("please provide a valid number!");
         }
     }
 }
