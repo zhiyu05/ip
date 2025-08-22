@@ -1,0 +1,9 @@
+todo finish ip project
+deadline finish st2334 quiz /by Sunday
+event birthday party /from 3pm Mon /to 5pm
+list
+mark 2
+list
+unmark 2
+list
+bye

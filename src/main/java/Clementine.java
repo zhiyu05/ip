@@ -46,7 +46,12 @@ public class Clementine {
     }
 
     public static void addTask (String taskDescription) {
-        Task task = new Todo(taskDescription);
+        String cleanDescription = taskDescription;
+        if (taskDescription.startsWith("todo ")) {
+            cleanDescription = taskDescription.substring(5); // Remove "todo "
+        }
+
+        Task task = new Todo(cleanDescription);
         tasks[taskCount] = task;
         String response = "okay! ive added the task quack!";
         taskCount++;
