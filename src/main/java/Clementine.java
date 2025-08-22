@@ -12,23 +12,37 @@ public class Clementine {
             if (input.equals("bye")) {
                 outro();
                 break;
-            } else if (input.equals("list")) {
-                listTasks();
-            } else if (input.startsWith("mark ")) {
-                markTask(input);
-            } else if (input.startsWith("unmark ")) {
-                unmarkTask(input);
-            } else if (input.startsWith("event ")) {
-                addEventTask(input);
-            } else if (input.startsWith("deadline ")) {
-                addDeadlineTask(input);
-            } else {
-                addTask(input);
+            }
+            try {
+                processCommand(input);
+            } catch (ClementineException e) {
+                line();
+                System.out.println("OOPS!!! " + e.getMessage());
+                line();
             }
         }
         scanner.close();
     }
 
+    private static void processCommand(String input) throws ClementineException {
+        if (input.isEmpty()) {
+            throw new ClementineException("oh quack! i cant read empty commands!");
+        } else if (input.equals("list")) {
+            listTasks();
+        } else if (input.startsWith("mark")) {
+            markTask(input);
+        } else if (input.startsWith("unmark")) {
+            unmarkTask(input);
+        } else if (input.startsWith("event")) {
+            addEventTask(input);
+        } else if (input.startsWith("deadline")) {
+            addDeadlineTask(input);
+        } else if (input.startsWith("todo")) {
+            addTask(input);
+        } else {
+            throw new ClementineException("quack quack! i don't recognise this word!");
+        }
+    }
     public static void intro () {
         line();
         System.out.println("Quack! I'm clementine\n What can i help you with today?\n");
@@ -45,10 +59,21 @@ public class Clementine {
         System.out.println( "______________________________________________\n");
     }
 
-    public static void addTask (String taskDescription) {
-        String cleanDescription = taskDescription;
-        if (taskDescription.startsWith("todo ")) {
-            cleanDescription = taskDescription.substring(5); // Remove "todo "
+    public static void addTask (String taskDescription) throws ClementineException {
+        if (taskCount >= 100) {
+            throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
+        }
+        String cleanDescription;
+        if (taskDescription.equals("todo")) {
+            throw new ClementineException("quack! the description of a todo cannot be empty!");
+        } else if (taskDescription.startsWith("todo ")) {
+            cleanDescription = taskDescription.substring(5).trim(); // Remove "todo "
+        } else {
+            cleanDescription = taskDescription.trim();
+        }
+
+        if (cleanDescription.isEmpty()) {
+            throw new ClementineException("quack! the description of a todo cannot be empty!");
         }
 
         Task task = new Todo(cleanDescription);
@@ -72,7 +97,15 @@ public class Clementine {
         line();
     }
 
-    public static void markTask(String input) {
+    public static void markTask(String input) throws ClementineException{
+        if (taskCount == 0) {
+            throw new ClementineException ("quack! u dont have any tasks yet!");
+        }
+
+        if (input.equals("mark")) {
+            throw new ClementineException("quack! please provide a task number");
+        }
+
         try{
             String numberPart = input.substring(5);
             int taskNumber = Integer.parseInt(numberPart);
@@ -84,14 +117,22 @@ public class Clementine {
                 System.out.println(" " + tasks[taskNumber - 1].toString());
                 line();
             } else {
-                System.out.println("invalid task number!");
+                throw new ClementineException("invalid task number!");
             }
         } catch (NumberFormatException e) {
-            System.out.println("please provide a valid number");
+            throw new ClementineException("please provide a valid number");
         }
     }
 
-    public static void unmarkTask(String input) {
+    public static void unmarkTask(String input) throws ClementineException{
+        if (taskCount == 0) {
+            throw new ClementineException ("quack! u dont have any tasks yet!");
+        }
+
+        if (input.equals("unmark")) {
+            throw new ClementineException("please provide a number!");
+        }
+
         try {
             String numberPart = input.substring(7);
             int taskNumber = Integer.parseInt(numberPart);
@@ -103,19 +144,36 @@ public class Clementine {
                 System.out.println(" " + tasks[taskNumber - 1].toString());
                 line();
             } else {
-                System.out.println("invalid task number");
+                throw new ClementineException("invalid task number");
             }
         } catch (NumberFormatException e) {
-            System.out.println("please provide a valid number");
+            throw new ClementineException("please provide a valid number");
         }
     }
 
-    public static void addDeadlineTask(String input) {
+    public static void addDeadlineTask(String input) throws ClementineException{
+        if (taskCount >= 100) {
+            throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
+        }
+        if (input.equals("deadline")) {
+            throw new ClementineException("the description of a deadline cannot be empty");
+        }
+        if (!input.contains("/by")) {
+            throw new ClementineException("quack! please use the format: deadline <description> /by <date>");
+        }
         String[] parts = input.split("/by", 2);
 
         if (parts.length == 2) {
-            String description = parts[0].substring(9);
-            String deadline = parts[1];
+            String description = parts[0].substring(9).trim();
+            String deadline = parts[1].trim();
+
+            if (description.isEmpty()) {
+                throw new ClementineException("the description of a deadline cannot be empty");
+            }
+
+            if (deadline.isEmpty()) {
+                throw new ClementineException("the deadline date cannot be empty!");
+            }
 
             Task task = new Deadline(description, deadline);
             tasks[taskCount] = task;
@@ -127,19 +185,35 @@ public class Clementine {
             System.out.println("now you have " + taskCount + " remaining tasks!");
             line();
         } else {
-            System.out.println("please use the correct format for deadline");
+            throw new ClementineException("quack! please use the format: deadline <description> /by <date>");
         }
     }
 
-    public static void addEventTask (String input) {
+    public static void addEventTask (String input) throws ClementineException{
+        if (taskCount >= 100) {
+            throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
+        }
+        if (input.equals("event")) {
+            throw new ClementineException("quack! the description of the event cannot be empty");
+        }
+
+        if (!input.contains("/from") || !input.contains("/to")) {
+            throw new ClementineException("quack! please use the format: event <description> /from <time> /to <time>");
+        }
         String[] parts = input.split("/from", 2);
         if (parts.length == 2) {
-            String description = parts[0].substring(6);
+            String description = parts[0].substring(6).trim();
             String [] timeline = parts[1].split("/to", 2);
 
+            if (description.isEmpty()) {
+                throw new ClementineException("quack! the description of the event cannot be empty");
+            }
             if (timeline.length == 2) {
-                String startTime = timeline[0];
-                String endTime = timeline[1];
+                String startTime = timeline[0].trim();
+                String endTime = timeline[1].trim();
+                if (startTime.isEmpty() || endTime.isEmpty()) {
+                    throw new ClementineException("both start time and end time must be specified!");
+                }
 
                 Task task = new Event(description, startTime, endTime);
                 tasks[taskCount] = task;
@@ -150,10 +224,10 @@ public class Clementine {
                 System.out.println("now you have " + taskCount + " remaining tasks!");
                 line();
             } else {
-                System.out.println("please use correct format for event task!");
+                throw new ClementineException("quack! please use the format: event <description> /from <time> /to <time>");
             }
         } else {
-            System.out.println("please use correct format for event task!");
+            throw new ClementineException("please use correct format for event task!");
         }
     }
 }
