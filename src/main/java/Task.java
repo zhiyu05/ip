@@ -11,6 +11,10 @@ public class Task {
         return (isDone ? "X" : " "); // mark done task with X
     }
 
+    public int getCompletion() {
+        return (isDone ? 1 : 0);
+    }
+
     public String toString() {
         return "[" + getStatusIcon() + "] " + this.description;
     }
@@ -21,6 +25,10 @@ public class Task {
 
     public void taskUndone() {
         this.isDone = false;
+    }
+
+    public String storeData() {
+        return getCompletion() + " | " + this.description;
     }
 
 }

@@ -1,12 +1,18 @@
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Clementine {
 
     private static ArrayList<Task> tasks = new ArrayList<>();
+    private static final String FILE_PATH = "./data/clementine.txt";
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        loadTasks();
         intro();
         while(scanner.hasNextLine()) {
             String input = scanner.nextLine();
@@ -47,6 +53,94 @@ public class Clementine {
             throw new ClementineException("quack quack! i don't recognise this word!");
         }
     }
+
+    private static void loadTasks() {
+        try {
+            File file = new File(FILE_PATH);
+            if (!file.exists()) {
+                return;
+            }
+
+            Scanner fileScanner = new Scanner(file);
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine().trim();
+                if (!line.isEmpty()) {
+                    parseTask(line);
+                }
+            }
+            fileScanner.close();
+        } catch (FileNotFoundException e) {
+
+        } catch (Exception e) {
+            System.out.println("quack! error loading tasks: " + e.getMessage());
+        }
+    }
+
+    private static void parseTask(String line) {
+        String[] parts = line.split(" \\| ");
+        if (parts.length < 3) {
+            return;
+        }
+
+        String taskType = parts[0];
+        int isDone = Integer.parseInt(parts[1]);
+        String description = parts[2];
+
+        Task task = null;
+
+        switch (taskType) {
+        case "T":
+            task = new Todo(description);
+            break;
+
+        case "D":
+            if (parts.length >= 4) {
+                String deadline = parts[3].replace("/by ", "");
+                task = new Deadline(description, deadline);
+            }
+            break;
+
+        case "E":
+            if (parts.length >= 4) {
+                String timeInfo = parts[3];
+
+                if (timeInfo.contains("/from") && timeInfo.contains("/to")) {
+                    String[] timeParts = timeInfo.split("/from", 2)[1].split("/to", 2);
+                    if (timeParts.length == 2) {
+                        String startTime = timeParts[0].trim();
+                        String endTime = timeParts[1].trim();
+                        task = new Event(description, startTime, endTime);
+                    }
+                }
+            }
+            break;
+        }
+
+        if (task != null) {
+            if (isDone == 1) {
+                task.taskDone();
+            }
+            tasks.add(task);
+        }
+    }
+
+    private static void saveTasks() {
+        try {
+            File file = new File(FILE_PATH);
+            File parentDir = file.getParentFile();
+            if (parentDir != null && !parentDir.exists()) {
+                parentDir.mkdirs();
+            }
+
+            StringBuilder content = new StringBuilder();
+            for (Task task : tasks) {
+                content.append(task.storeData()).append("\n");
+            }
+            writeToFile(FILE_PATH, content.toString());
+        } catch (IOException e) {
+            System.out.println("quack! error saving tasks: " + e.getMessage());
+        }
+    }
     public static void intro () {
         line();
         System.out.println("Quack! I'm clementine\n What can i help you with today?\n");
@@ -82,6 +176,7 @@ public class Clementine {
 
         Task task = new Todo(cleanDescription);
         tasks.add(task);
+        saveTasks();
         String response = "okay! ive added the task quack!";
         line();
         System.out.println(response);
@@ -115,6 +210,7 @@ public class Clementine {
 
             if (taskNumber >= 1 && taskNumber <= tasks.size()) {
                 tasks.get(taskNumber - 1).taskDone();
+                saveTasks();
                 line();
                 System.out.println("good job! you've completed the task");
                 System.out.println(" " + tasks.get(taskNumber - 1).toString());
@@ -142,6 +238,7 @@ public class Clementine {
 
             if (taskNumber >= 1 && taskNumber <= tasks.size()) {
                 tasks.get(taskNumber - 1).taskUndone();
+                saveTasks();
                 line();
                 System.out.println("okay, ive changed this task to not done. quack!");
                 System.out.println(" " + tasks.get(taskNumber - 1).toString());
@@ -180,6 +277,7 @@ public class Clementine {
 
             Task task = new Deadline(description, deadline);
             tasks.add(task);
+            saveTasks();
             String response = "okay! ive added the deadline task quack!";
             line();
             System.out.println(response);
@@ -219,6 +317,7 @@ public class Clementine {
 
                 Task task = new Event(description, startTime, endTime);
                 tasks.add(task);
+                saveTasks();
                 line();
                 System.out.println("okay! ive added the event task for u! quack!");
                 System.out.println(" " + task.toString());
@@ -247,6 +346,7 @@ public class Clementine {
 
             if (taskNumber >= 1 && taskNumber <= tasks.size()) {
                 Task deletedTask = tasks.remove(taskNumber - 1);
+                saveTasks();
                 line();
                 System.out.println("quack! ive deleted this task for you :)");
                 System.out.println(" " + deletedTask.toString());
@@ -258,5 +358,17 @@ public class Clementine {
         } catch (NumberFormatException e) {
             throw new ClementineException("please provide a valid number!");
         }
+    }
+
+    private static void writeToFile(String filePath, String textToAdd) throws IOException {
+        FileWriter fw = new FileWriter(filePath);
+        fw.write(textToAdd);
+        fw.close();
+    }
+
+    private static void appendToFile(String filePath, String textToAppend) throws IOException {
+        FileWriter fw = new FileWriter(filePath, true); // create a FileWriter in append mode
+        fw.write(textToAppend);
+        fw.close();
     }
 }
