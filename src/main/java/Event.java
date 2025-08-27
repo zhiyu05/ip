@@ -1,8 +1,10 @@
-public class Event extends Task {
-    protected String start;
-    protected String end;
+import java.time.LocalDateTime;
 
-    public Event (String description, String start, String end) {
+public class Event extends Task {
+    protected LocalDateTime start;
+    protected LocalDateTime end;
+
+    public Event (String description, LocalDateTime start, LocalDateTime end) {
         super(description);
         this.start = start;
         this.end = end;
@@ -10,11 +12,15 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from:" + this.start + " to:" + this.end + ")";
+        String started = Clementine.formatDateTime(this.start);
+        String ended = Clementine.formatDateTime(this.end);
+        return "[E]" + super.toString() + " (from:" + started + " to:" + ended + ")";
     }
 
     @Override
     public String storeData() {
-        return "E | " + super.storeData() + " | /from " + this.start + "/to " + this.end;
+        String started = Clementine.formatDateTimeForStorage(this.start);
+        String ended = Clementine.formatDateTimeForStorage(this.end);
+        return "E | " + super.storeData() + " | /from " + started + "/to " + ended;
     }
 }
