@@ -198,21 +198,21 @@ public class Clementine {
         }
     }
 
-    public static void intro () {
-        line();
+    /*public static void intro () {
+        showLine();
         System.out.println("Quack! I'm clementine\n What can i help you with today?\n");
-        line();
+        showLine();
     }
 
     public static void outro () {
-        line();
+        showLine();
         System.out.println("Bye! quack u later! hope you have a great day!");
-        line();
+        showLine();
     }
 
-    public static void line() {
+    public static void showLine() {
         System.out.println( "______________________________________________\n");
-    }
+    }*/
 
     // for todo tasks
     public static void addTask (String taskDescription) throws ClementineException {
@@ -243,15 +243,15 @@ public class Clementine {
         line();
     }
 
-    public static void listTasks () {
+    /*public static void listTasks () {
         String response = "tasks to be done before freedom:\n";
         for (int i = 0; i < tasks.size(); i++) {
             response += (i + 1) + ". " + tasks.get(i).toString() + "\n";
         }
-        line();
+        showLine();
         System.out.println(response);
-        line();
-    }
+        showLine();
+    }*/
 
     public static void markTask(String input) throws ClementineException{
         if (tasks.size() == 0) {
