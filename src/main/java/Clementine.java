@@ -4,6 +4,11 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.time.format.DateTimeFormatter;
+
 
 public class Clementine {
 
@@ -54,6 +59,54 @@ public class Clementine {
         }
     }
 
+    public static LocalDateTime parseDateTime(String input) throws DateTimeParseException {
+        DateTimeFormatter[] dateTimeFormatters = {
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm"),
+                DateTimeFormatter.ofPattern("d/MM/yyyy HHmm"),
+                DateTimeFormatter.ofPattern("d/M/yyyy HHmm"),
+                DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"),
+                DateTimeFormatter.ofPattern("d/MM/yyyy HH:mm"),
+                DateTimeFormatter.ofPattern("d/M/yyyy HH:mm")
+        };
+
+        DateTimeFormatter[] dateFormatters = {
+            DateTimeFormatter.ofPattern("dd/MM/yyyy"),
+            DateTimeFormatter.ofPattern("d/M/yyyy")
+        };
+
+        for (DateTimeFormatter f : dateTimeFormatters) {
+            try {
+                return LocalDateTime.parse(input, f);
+            } catch (DateTimeParseException e) {
+                // try next format
+            }
+        }
+
+        for (DateTimeFormatter f : dateFormatters) {
+            try {
+                LocalDate date = LocalDate.parse(input, f);
+                return date.atStartOfDay();
+            } catch (DateTimeParseException e) {
+                // try next
+            }
+        }
+
+        throw new DateTimeParseException("invalid date format!use dd/MM/yyyy or dd/MM/yyyy HHmm", input, 0);
+    }
+
+    public static String formatDateTime(LocalDateTime dateTime) {
+        // if no time specified
+        if (dateTime.getHour() == 0 && dateTime.getMinute() == 0) {
+            return dateTime.format(DateTimeFormatter.ofPattern("d MMM yyyy"));
+        } else {
+            return dateTime.format(DateTimeFormatter.ofPattern("d MMM yyyy h:mm a"));
+        }
+    }
+
+    public static String formatDateTimeForStorage(LocalDateTime dateTime) {
+        return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm"));
+    }
+
     private static void loadTasks() {
         try {
             File file = new File(FILE_PATH);
@@ -96,7 +149,8 @@ public class Clementine {
         case "D":
             if (parts.length >= 4) {
                 String deadline = parts[3].replace("/by ", "");
-                task = new Deadline(description, deadline);
+                LocalDateTime timeDeadline = parseDateTime(deadline);
+                task = new Deadline(description, timeDeadline);
             }
             break;
 
@@ -108,8 +162,10 @@ public class Clementine {
                     String[] timeParts = timeInfo.split("/from", 2)[1].split("/to", 2);
                     if (timeParts.length == 2) {
                         String startTime = timeParts[0].trim();
+                        LocalDateTime start = parseDateTime(startTime);
                         String endTime = timeParts[1].trim();
-                        task = new Event(description, startTime, endTime);
+                        LocalDateTime end = parseDateTime(endTime);
+                        task = new Event(description, start, end);
                     }
                 }
             }
@@ -157,6 +213,7 @@ public class Clementine {
         System.out.println( "______________________________________________\n");
     }
 
+    // for todo tasks
     public static void addTask (String taskDescription) throws ClementineException {
         if (tasks.size() >= 100) {
             throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
@@ -275,15 +332,21 @@ public class Clementine {
                 throw new ClementineException("the deadline date cannot be empty!");
             }
 
-            Task task = new Deadline(description, deadline);
-            tasks.add(task);
-            saveTasks();
-            String response = "okay! ive added the deadline task quack!";
-            line();
-            System.out.println(response);
-            System.out.println(" " + task.toString());
-            System.out.println("now you have " + tasks.size() + " remaining tasks!");
-            line();
+            try {
+                LocalDateTime deadlineTime = parseDateTime(deadline);
+                Task task = new Deadline(description, deadlineTime);
+                tasks.add(task);
+                saveTasks();
+                String response = "okay! ive added the deadline task quack!";
+                line();
+                System.out.println(response);
+                System.out.println(" " + task.toString());
+                System.out.println("now you have " + tasks.size() + " remaining tasks!");
+                line();
+            } catch (DateTimeParseException e) {
+                throw new ClementineException("quack!" + e.getMessage());
+            }
+
         } else {
             throw new ClementineException("quack! please use the format: deadline <description> /by <date>");
         }
@@ -310,12 +373,14 @@ public class Clementine {
             }
             if (timeline.length == 2) {
                 String startTime = timeline[0].trim();
+                LocalDateTime start = parseDateTime(startTime);
                 String endTime = timeline[1].trim();
+                LocalDateTime end = parseDateTime(endTime);
                 if (startTime.isEmpty() || endTime.isEmpty()) {
                     throw new ClementineException("both start time and end time must be specified!");
                 }
 
-                Task task = new Event(description, startTime, endTime);
+                Task task = new Event(description, start, end);
                 tasks.add(task);
                 saveTasks();
                 line();
@@ -363,12 +428,6 @@ public class Clementine {
     private static void writeToFile(String filePath, String textToAdd) throws IOException {
         FileWriter fw = new FileWriter(filePath);
         fw.write(textToAdd);
-        fw.close();
-    }
-
-    private static void appendToFile(String filePath, String textToAppend) throws IOException {
-        FileWriter fw = new FileWriter(filePath, true); // create a FileWriter in append mode
-        fw.write(textToAppend);
         fw.close();
     }
 }
