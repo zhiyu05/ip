@@ -1,3 +1,10 @@
+package clementine;
+
+import clementine.task.Deadline;
+import clementine.task.Event;
+import clementine.task.Task;
+import clementine.task.Todo;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

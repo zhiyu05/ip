@@ -1,3 +1,7 @@
+package clementine.task;
+
+import clementine.Parser;
+
 import java.time.LocalDateTime;
 
 public class Event extends Task {
