@@ -1,3 +1,6 @@
+package clementine;
+import clementine.task.Task;
+
 import java.util.ArrayList;
 
 public class TaskList {
