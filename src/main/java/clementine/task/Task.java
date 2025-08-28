@@ -16,6 +16,8 @@ public class Task {
         return (isDone ? 1 : 0);
     }
 
+    public String getDescription() { return this.description; }
+
     public String toString() {
         return "[" + getStatusIcon() + "] " + this.description;
     }
@@ -31,6 +33,8 @@ public class Task {
     public String storeData() {
         return getCompletion() + " | " + this.description;
     }
+
+    public boolean isDone() { return this.isDone; }
 
 }
 
