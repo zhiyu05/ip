@@ -10,13 +10,13 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        String formattedDate = Clementine.formatDateTime(by);
+        String formattedDate = Parser.formatDateTime(by);
         return "[D]" + super.toString() + " (by:" + formattedDate + ")";
     }
 
     @Override
     public String storeData() {
-        String dateString = Clementine.formatDateTimeForStorage(by);
+        String dateString = Parser.formatDateTimeForStorage(by);
         return "D | " + super.storeData() + " | /by " + dateString;
     }
 }
