@@ -12,15 +12,15 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        String started = Clementine.formatDateTime(this.start);
-        String ended = Clementine.formatDateTime(this.end);
+        String started = Parser.formatDateTime(this.start);
+        String ended = Parser.formatDateTime(this.end);
         return "[E]" + super.toString() + " (from:" + started + " to:" + ended + ")";
     }
 
     @Override
     public String storeData() {
-        String started = Clementine.formatDateTimeForStorage(this.start);
-        String ended = Clementine.formatDateTimeForStorage(this.end);
+        String started = Parser.formatDateTimeForStorage(this.start);
+        String ended = Parser.formatDateTimeForStorage(this.end);
         return "E | " + super.storeData() + " | /from " + started + "/to " + ended;
     }
 }

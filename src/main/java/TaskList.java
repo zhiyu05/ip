@@ -19,8 +19,11 @@ public class TaskList {
         return tasks.size();
     }
 
-    public Task getTask(int index) {
-        return tasks.get(index);
+    public Task getTask(int index) throws ClementineException {
+        if (index < 1 || index > tasks.size()) {
+            throw new ClementineException("invalid task number!");
+        }
+        return tasks.get(index - 1);
     }
 
     public boolean isEmpty() {

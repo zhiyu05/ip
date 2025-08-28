@@ -83,4 +83,14 @@ public class UI {
         System.out.println("now you have " + totalTasks + " remaining tasks");
         showLine();
     }
+
+    public void showLoadingError(String errorMessage) {
+        System.out.println("quack! error loading tasks: " + errorMessage);
+    }
+
+    public void closeScanner() {
+        if (scanner != null) {
+            scanner.close();
+        }
+    }
 }

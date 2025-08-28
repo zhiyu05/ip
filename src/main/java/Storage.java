@@ -37,7 +37,7 @@ public class Storage {
         return lines;
     }
 
-    public void save(ArrayList<String> lines) throws ClementineException {
+    public void save(ArrayList<Task> tasks) throws ClementineException {
         try {
             File file = new File(filePath);
             File parentDir = file.getParentFile();
@@ -46,8 +46,8 @@ public class Storage {
             }
 
             StringBuilder content = new StringBuilder();
-            for (String line : lines) {
-                content.append(line).append("\n");
+            for (Task task : tasks) {
+                content.append(task.storeData()).append("\n");
             }
             writeToFile(content.toString());
         } catch (IOException e) {
