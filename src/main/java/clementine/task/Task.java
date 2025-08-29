@@ -74,5 +74,9 @@ public class Task {
      */
     public boolean isDone() { return this.isDone; }
 
+    public boolean containsKeyword(String keyword) {
+        return this.description.toLowerCase().contains(keyword.toLowerCase());
+    }
+
 }
 

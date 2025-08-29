@@ -44,6 +44,8 @@ public class Parser {
             return "todo";
         } else if (input.startsWith("delete")) {
             return "delete";
+        } else if (input.startsWith("find")) {
+            return "find";
         } else {
             throw new ClementineException("quack quack! i don't recognise this word!");
         }
@@ -293,5 +295,19 @@ public class Parser {
      */
     public static String formatDateTimeForStorage(LocalDateTime dateTime) {
         return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm"));
+    }
+
+    public static String parseFindKeyword(String input) throws ClementineException {
+        if (input.equals("find")) {
+            throw new ClementineException("quack! please specify the keyword to search for!");
+        }
+
+        String keyword = input.substring(4).trim();
+
+        if (keyword.isEmpty()) {
+            throw new ClementineException("quack! please specify the keyword to search for!");
+        }
+
+        return keyword;
     }
 }
