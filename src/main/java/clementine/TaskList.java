@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public class TaskList {
     private ArrayList<Task> tasks;
+    private static final int MAX_TASKS = 100;
 
     public TaskList(ArrayList<Task> tasks) {
         this.tasks = tasks;
@@ -34,7 +35,7 @@ public class TaskList {
     }
 
     public void addTask (Task task) throws ClementineException {
-        if (tasks.size() >= 100) {
+        if (tasks.size() >= MAX_TASKS) {
             throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
         }
         tasks.add(task);

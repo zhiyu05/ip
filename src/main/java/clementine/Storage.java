@@ -34,7 +34,7 @@ public class Storage {
             }
             fileScanner.close();
         } catch (FileNotFoundException e) {
-
+            // File not found on first run. Safe to ignore as a new file will be created when saving.
         } catch (Exception e) {
             throw new ClementineException("quack! error loading tasks: " + e.getMessage());
         }
