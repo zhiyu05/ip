@@ -3,13 +3,26 @@ import clementine.task.Task;
 
 import java.util.ArrayList;
 
-
+/**
+ * The main Clementine class that serves as the entry point and orchestrator for the chatbot.
+ * This class coordinates interactions between the UI, Storage, TaskList, and Parser components
+ * to provide a complete task management experience. It handles the main application loop,
+ * command processing, and error management.
+ *
+ * @author zhiyu
+ */
 public class Clementine {
 
     private Storage storage;
     private TaskList tasks;
     private UI ui;
 
+    /**
+     * Constructs a new Clementine application instance with the specified file path for data storage.
+     * Initializes all components and attempts to load existing tasks from storage.
+     * If loading fails, starts with an empty task list and displays the error to the user.
+     * @param filePath the path to the file where tasks will be stored and loaded from
+     */
     public Clementine(String filePath) {
         ui = new UI();
         storage = new Storage(filePath);
@@ -26,6 +39,14 @@ public class Clementine {
         }
     }
 
+    /**
+     * Runs the main application loop.
+     * Displays the intro message, processes user commands until "bye" is entered,
+     * and handles all command types including task creation, modification, and deletion.
+     * Automatically saves changes to storage after each operation.
+     *
+     * @throws ClementineException if there's a critical error during application execution
+     */
     public void run() throws ClementineException{
         ui.showIntro();
         while (true) {
@@ -90,6 +111,12 @@ public class Clementine {
         ui.closeScanner();
     }
 
+    /**
+     * The main entry point for the Clementine task management application.
+     * Creates a new Clementine instance with the default data file path and starts the application.
+     *
+     * @param args command line arguments (not used)
+     */
     public static void main(String[] args) {
         try {
             new Clementine("./data/clementine.txt").run();
