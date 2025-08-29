@@ -1,13 +1,4 @@
 package clementine.task;
-
-/**
- * Abstract base class representing a task in the Clementine task management application.
- * This class provides common functionality for all task types including completion status,
- * description management, and basic string formatting. Subclasses extend this to add
- * specific features like deadlines or time ranges.
- *
- * @author zhiyu
- */
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -49,6 +40,7 @@ public class Task {
      * Shows the completion status and description in a formatted manner.
      * @return a formatted string in the format "[status_icon] description"
      */
+    @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + this.description;
     }

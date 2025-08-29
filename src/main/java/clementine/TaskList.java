@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 public class TaskList {
     private ArrayList<Task> tasks;
+    private static final int MAX_TASKS = 100;
 
     /**
      * Constructs a TaskList with an existing list of tasks.
@@ -71,7 +72,7 @@ public class TaskList {
      * @throws ClementineException if the task list has reached its maximum capacity of 100 tasks
      */
     public void addTask (Task task) throws ClementineException {
-        if (tasks.size() >= 100) {
+        if (tasks.size() >= MAX_TASKS) {
             throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
         }
         tasks.add(task);
