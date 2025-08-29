@@ -76,4 +76,16 @@ public class TaskList {
 
         tasks.remove(index - 1);
     }
+
+    public ArrayList<Task> findTasks(String keyword) {
+        ArrayList<Task> matchingTasks = new ArrayList<>();
+
+        for (Task task : tasks) {
+            if (task.containsKeyword(keyword)) {
+                matchingTasks.add(task);
+            }
+        }
+
+        return matchingTasks;
+    }
 }

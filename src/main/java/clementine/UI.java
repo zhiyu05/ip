@@ -96,4 +96,20 @@ public class UI {
             scanner.close();
         }
     }
+
+    public void showFindTasks(ArrayList<Task> tasks) {
+        if (tasks.isEmpty()) {
+            showLine();
+            System.out.println("oh quack! no matching tasks found!");
+            showLine();
+        } else {
+            String response = "quack! here's the tasks u might be looking for:\n";
+            for (int i = 0; i < tasks.size(); i++) {
+                response += (i + 1) + ". " + tasks.get(i).toString() + "\n";
+            }
+            showLine();
+            System.out.println(response);
+            showLine();
+        }
+    }
 }

@@ -43,6 +43,11 @@ public class Clementine {
                 case "list":
                     ui.showTaskList(tasks.getTaskList());
                     break;
+                case "find":
+                    String keyword = Parser.parseFindKeyword(input);
+                    ArrayList<Task> matchingTasks = tasks.findTasks(keyword);
+                    ui.showFindTasks(matchingTasks);
+                    break;
                 case "mark":
                     taskNumber = Parser.parseTaskNumber(input, "mark");
                     Task markTask = tasks.getTask(taskNumber);
