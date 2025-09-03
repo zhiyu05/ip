@@ -1,8 +1,8 @@
 package clementine.task;
 
-import clementine.Parser;
-
 import java.time.LocalDateTime;
+
+import clementine.Parser;
 
 /**
  * Represents a task with a deadline in the Clementine task management application.

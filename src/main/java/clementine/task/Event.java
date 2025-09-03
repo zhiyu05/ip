@@ -1,8 +1,8 @@
 package clementine.task;
 
-import clementine.Parser;
-
 import java.time.LocalDateTime;
+
+import clementine.Parser;
 
 /**
  * Represents a task with a specific start and end time in the Clementine task management application.
@@ -21,7 +21,7 @@ public class Event extends Task {
      * @param start the start date and time of the event
      * @param end the end date and time of the event
      */
-    public Event (String description, LocalDateTime start, LocalDateTime end) {
+    public Event(String description, LocalDateTime start, LocalDateTime end) {
         super(description);
         this.start = start;
         this.end = end;

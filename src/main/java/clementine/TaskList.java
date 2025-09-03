@@ -1,7 +1,8 @@
 package clementine;
-import clementine.task.Task;
 
 import java.util.ArrayList;
+
+import clementine.task.Task;
 
 /**
  * The TaskList class manages a collection of tasks for the Clementine chatbot.
@@ -10,8 +11,8 @@ import java.util.ArrayList;
  * @author zhiyu
  */
 public class TaskList {
-    private ArrayList<Task> tasks;
     private static final int MAX_TASKS = 100;
+    private ArrayList<Task> tasks;
 
     /**
      * Constructs a TaskList with an existing list of tasks.
@@ -71,9 +72,10 @@ public class TaskList {
      * @param task the Task object to add to the list
      * @throws ClementineException if the task list has reached its maximum capacity of 100 tasks
      */
-    public void addTask (Task task) throws ClementineException {
+    public void addTask(Task task) throws ClementineException {
         if (tasks.size() >= MAX_TASKS) {
-            throw new ClementineException("oh quack! the task list is full, please complete some tasks before adding extra!");
+            throw new ClementineException("oh quack! the task list is full,"
+                    + "please complete some tasks before adding extra!");
         }
         tasks.add(task);
     }
@@ -83,9 +85,9 @@ public class TaskList {
      * @param index the position of the task to mark as done (1-indexed)
      * @throws ClementineException if the tasklist is empty or the index is out of bounds
      */
-    public void markTask(int index) throws ClementineException{
+    public void markTask(int index) throws ClementineException {
         if (tasks.isEmpty()) {
-            throw new ClementineException ("quack! u dont have any tasks yet!");
+            throw new ClementineException("quack! u dont have any tasks yet!");
         }
 
         if (index < 1 || index > tasks.size()) {
@@ -100,9 +102,9 @@ public class TaskList {
      * @param index the position of the task to mark as not done (1-indexed)
      * @throws ClementineException if the tasklist is empty or the index is out of bounds
      */
-    public void unmarkTask(int index) throws ClementineException{
+    public void unmarkTask(int index) throws ClementineException {
         if (tasks.isEmpty()) {
-            throw new ClementineException ("quack! u dont have any tasks yet!");
+            throw new ClementineException("quack! u dont have any tasks yet!");
         }
 
         if (index < 1 || index > tasks.size()) {
@@ -117,7 +119,7 @@ public class TaskList {
      * @param index the position of the task to delete (1-indexed)
      * @throws ClementineException if the task list is empty or the index is out of bounds
      */
-    public void deleteTask (int index) throws ClementineException{
+    public void deleteTask(int index) throws ClementineException {
         if (tasks.isEmpty()) {
             throw new ClementineException("quack! you dont have any tasks to delete!");
         }
@@ -129,6 +131,12 @@ public class TaskList {
         tasks.remove(index - 1);
     }
 
+    /**
+     * Finds all tasks in the list that contain the given keyword.
+     * @param keyword the word or phrase to search for in task descriptions
+     * @return a list of tasks whose descriptions contain the given keyword;
+     *         the list will be empty if no matches are found
+     */
     public ArrayList<Task> findTasks(String keyword) {
         ArrayList<Task> matchingTasks = new ArrayList<>();
 

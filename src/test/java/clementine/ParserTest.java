@@ -1,14 +1,18 @@
 package clementine;
-import clementine.task.Event;
-import clementine.task.Task;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import clementine.task.Event;
+import clementine.task.Task;
 
 public class ParserTest {
     @Test
     public void dummyTest() {
-        assertEquals(2,2);
+        assertEquals(2, 2);
     }
 
     @Test
@@ -32,7 +36,7 @@ public class ParserTest {
     }
 
     @Test
-    public void getCommandType_success() throws ClementineException{
+    public void getCommandType_success() throws ClementineException {
         assertEquals("unmark", Parser.getCommandType("unmark 2"));
     }
 

@@ -1,7 +1,9 @@
 package clementine;
-import clementine.task.Task;
 
 import java.util.ArrayList;
+
+import clementine.task.Task;
+
 
 /**
  * The main Clementine class that serves as the entry point and orchestrator for the chatbot.
@@ -47,7 +49,7 @@ public class Clementine {
      *
      * @throws ClementineException if there's a critical error during application execution
      */
-    public void run() throws ClementineException{
+    public void run() throws ClementineException {
         ui.showIntro();
         while (true) {
             try {
@@ -108,6 +110,8 @@ public class Clementine {
                     storage.save(tasks.getTaskList());
                     ui.showDeletedTask(deleteTask, tasks.taskSize());
                     break;
+                default:
+                    ui.showError("oh quack! i don't understand this command!");
                 }
             } catch (ClementineException e) {
                 ui.showError(e.getMessage());
