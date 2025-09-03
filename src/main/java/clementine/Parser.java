@@ -1,14 +1,14 @@
 package clementine;
 
-import clementine.task.Deadline;
-import clementine.task.Event;
-import clementine.task.Task;
-import clementine.task.Todo;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+
+import clementine.task.Deadline;
+import clementine.task.Event;
+import clementine.task.Task;
+import clementine.task.Todo;
 
 /**
  * The Parser class provides static utility methods for parsing user input and handling data conversion.
@@ -52,7 +52,7 @@ public class Parser {
     }
 
     /**
-     * Parses a stored task lline and reconstructs the corresponding Task object.
+     * Parses a stored task line and reconstructs the corresponding Task object.
      * Handles Todo, Deadline, and Event task types from their stored format.
      * @param line the stored task data as a string
      * @return the reconstructed Task object, or null if the line format is invalid
@@ -70,34 +70,36 @@ public class Parser {
         Task task = null;
 
         switch (taskType) {
-            case "T":
-                task = new Todo(description);
-                break;
+        case "T":
+            task = new Todo(description);
+            break;
 
-            case "D":
-                if (parts.length >= 4) {
-                    String deadline = parts[3].replace("/by ", "");
-                    LocalDateTime timeDeadline = parseDateTime(deadline);
-                    task = new Deadline(description, timeDeadline);
-                }
-                break;
+        case "D":
+            if (parts.length >= 4) {
+                String deadline = parts[3].replace("/by ", "");
+                LocalDateTime timeDeadline = parseDateTime(deadline);
+                task = new Deadline(description, timeDeadline);
+            }
+            break;
 
-            case "E":
-                if (parts.length >= 4) {
-                    String timeInfo = parts[3];
+        case "E":
+            if (parts.length >= 4) {
+                String timeInfo = parts[3];
 
-                    if (timeInfo.contains("/from") && timeInfo.contains("/to")) {
-                        String[] timeParts = timeInfo.split("/from", 2)[1].split("/to", 2);
-                        if (timeParts.length == 2) {
-                            String startTime = timeParts[0].trim();
-                            LocalDateTime start = parseDateTime(startTime);
-                            String endTime = timeParts[1].trim();
-                            LocalDateTime end = parseDateTime(endTime);
-                            task = new Event(description, start, end);
-                        }
+                if (timeInfo.contains("/from") && timeInfo.contains("/to")) {
+                    String[] timeParts = timeInfo.split("/from", 2)[1].split("/to", 2);
+                    if (timeParts.length == 2) {
+                        String startTime = timeParts[0].trim();
+                        LocalDateTime start = parseDateTime(startTime);
+                        String endTime = timeParts[1].trim();
+                        LocalDateTime end = parseDateTime(endTime);
+                        task = new Event(description, start, end);
                     }
                 }
-                break;
+            }
+            break;
+        default:
+            return null;
         }
 
         if (task != null && isDone == 1) {
@@ -113,7 +115,7 @@ public class Parser {
      * @return the parsed task number as an integer
      * @throws ClementineException if the input doesn't contain a valid number
      */
-    public static int parseTaskNumber(String input, String commandType) throws ClementineException{
+    public static int parseTaskNumber(String input, String commandType) throws ClementineException {
         try {
             String numberPart = input.substring(commandType.length()).trim();
             return Integer.parseInt(numberPart);
@@ -124,7 +126,7 @@ public class Parser {
 
     /**
      * Parses user input to create a Deadline task.
-     * Expected format: "deadline <description> /by <date>"
+     * Expected format: "{@code deadline <description> /by <date>}"
      * @param input the user's deadline command input
      * @return a new Deadline object
      * @throws ClementineException if the input format is invalid or required fields are missing
@@ -164,7 +166,7 @@ public class Parser {
 
     /**
      * Parses user input to create an Event task.
-     * Expected format: "event <description> /from <time> /to <time>"
+     * Expected format: "{@code event <description> /from <time> /to <time>}"
      * @param input the user's event command input
      * @return a new Event object
      * @throws ClementineException if the input format is invalid or required fields are missing
@@ -210,7 +212,7 @@ public class Parser {
 
     /**
      * Parses user input to create a Todo task.
-     * Expected format: "todo <description>"
+     * Expected format: "{@code todo <description>}"
      * @param input the user's todo command input
      * @return a new Todo object
      * @throws ClementineException if the description is empty
@@ -297,6 +299,12 @@ public class Parser {
         return dateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HHmm"));
     }
 
+    /**
+     * Extracts a keyword from the {@code find} command input.
+     * @param input the full user input string starting with {@code find}
+     * @return the keyword to search for, trimmed of leading and trailing whitespace
+     * @throws ClementineException if no keyword is specified after {@code find}
+     */
     public static String parseFindKeyword(String input) throws ClementineException {
         if (input.equals("find")) {
             throw new ClementineException("quack! please specify the keyword to search for!");

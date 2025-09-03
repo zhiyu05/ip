@@ -1,8 +1,9 @@
 package clementine;
-import clementine.task.Task;
 
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import clementine.task.Task;
 
 /**
  * The UI class handles all user interface interactions for the Clementine chatbot.
@@ -45,7 +46,7 @@ public class UI {
      * Prints a decorative line separator to improve visual formatting of the output
      */
     public void showLine() {
-        System.out.println( "______________________________________________\n");
+        System.out.println("______________________________________________\n");
     }
 
     /**
@@ -76,16 +77,16 @@ public class UI {
     public void showTaskAdded(Task task, int totalTasks, String taskType) {
         showLine();
         switch(taskType) {
-            case "deadline":
-                System.out.println("okay! ive added the deadline task quack!");
-                break;
-            case "event":
-                System.out.println("okay! ive added the event task for u! quack!");
-                break;
-            case "todo":
-            default:
-                System.out.println("okay! ive added the task quack!");
-                break;
+        case "deadline":
+            System.out.println("okay! ive added the deadline task quack!");
+            break;
+        case "event":
+            System.out.println("okay! ive added the event task for u! quack!");
+            break;
+        case "todo":
+        default:
+            System.out.println("okay! ive added the task quack!");
+            break;
         }
         System.out.println(" " + task.toString());
         System.out.println("now you have " + totalTasks + " remaining tasks!");
@@ -161,6 +162,10 @@ public class UI {
         }
     }
 
+    /**
+     * Displays the given list of tasks that match a {@code find} command.
+     * @param tasks the list of tasks to display
+     */
     public void showFindTasks(ArrayList<Task> tasks) {
         if (tasks.isEmpty()) {
             showLine();

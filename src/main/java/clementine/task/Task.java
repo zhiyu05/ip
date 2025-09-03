@@ -1,4 +1,9 @@
 package clementine.task;
+
+/**
+ * Represents a generic task with a description and a completion status.
+ * @author zhiyu
+ */
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -33,7 +38,9 @@ public class Task {
      * Returns the description of the task
      * @return the task description as a String
      */
-    public String getDescription() { return this.description; }
+    public String getDescription() {
+        return this.description;
+    }
 
     /**
      * Returns a string representation of the task for display to users.
@@ -72,8 +79,17 @@ public class Task {
      * Checks whether the task is completed.
      * @return true if the task is completed, false otherwise
      */
-    public boolean isDone() { return this.isDone; }
+    public boolean isDone() {
+        return this.isDone;
+    }
 
+    /**
+     * Checks if the task's description contains the given keyword,
+     * ignoring case sensitivity.
+     * @param keyword the keyword to search for in the task description
+     * @return {@code true} if the description contains the keyword,
+     *         {@code false} otherwise
+     */
     public boolean containsKeyword(String keyword) {
         return this.description.toLowerCase().contains(keyword.toLowerCase());
     }

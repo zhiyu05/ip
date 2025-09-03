@@ -1,13 +1,13 @@
 package clementine;
 
-import clementine.task.Task;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Scanner;
+
+import clementine.task.Task;
 
 /**
  * The Storage class handles persistent storage operations for the Clementine chatbot
