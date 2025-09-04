@@ -42,6 +42,72 @@ public class Clementine {
     }
 
     /**
+     * Processes a single command and returns the response to be displayed in the GUI.
+     * This replaces the continuous loop from the CLI version
+     */
+    public String getResponse(String input) {
+        if (input == null || input.trim().isEmpty()) {
+            return "Please enter a command!";
+        }
+        input = input.trim();
+
+        if (input.equals("bye")) {
+            return "Bye! Hope to see you again soon!";
+        }
+
+        try {
+            String command = Parser.getCommandType(input);
+            int taskNumber;
+
+            switch(command) {
+            case "list":
+                return ui.showTaskList(tasks.getTaskList());
+            case "find":
+                String keyword = Parser.parseFindKeyword(input);
+                ArrayList<Task> matchingTasks = tasks.findTasks(keyword);
+                return ui.showFindTasks(matchingTasks);
+            case "mark":
+                taskNumber = Parser.parseTaskNumber(input, "mark");
+                Task markTask = tasks.getTask(taskNumber);
+                tasks.markTask(taskNumber);
+                storage.save(tasks.getTaskList());
+                return ui.showMarkedTask(markTask);
+            case "unmark":
+                taskNumber = Parser.parseTaskNumber(input, "unmark");
+                Task unmarkTask = tasks.getTask(taskNumber);
+                tasks.unmarkTask(taskNumber);
+                storage.save(tasks.getTaskList());
+                return ui.showUnmarkedTask(unmarkTask);
+            case "event":
+                Task eventTask = Parser.parseEventTask(input);
+                tasks.addTask(eventTask);
+                storage.save(tasks.getTaskList());
+                return ui.showTaskAdded(eventTask, tasks.taskSize(), "event");
+            case "deadline":
+                Task deadlineTask = Parser.parseDeadlineTask(input);
+                tasks.addTask(deadlineTask);
+                storage.save(tasks.getTaskList());
+                return ui.showTaskAdded(deadlineTask, tasks.taskSize(), "deadline");
+            case "todo":
+                Task todoTask = Parser.parseTodoTask(input);
+                tasks.addTask(todoTask);
+                storage.save(tasks.getTaskList());
+                return ui.showTaskAdded(todoTask, tasks.taskSize(), "todo");
+            case "delete":
+                taskNumber = Parser.parseTaskNumber(input, "delete");
+                Task deleteTask = tasks.getTask(taskNumber);
+                tasks.deleteTask(taskNumber);
+                storage.save(tasks.getTaskList());
+                return ui.showDeletedTask(deleteTask, tasks.taskSize());
+            default:
+                return ui.showError("oh quack! i don't understand this command!");
+            }
+        } catch (ClementineException e) {
+            return ui.showError(e.getMessage());
+        }
+    }
+
+    /**
      * Runs the main application loop.
      * Displays the intro message, processes user commands until "bye" is entered,
      * and handles all command types including task creation, modification, and deletion.
