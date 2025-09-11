@@ -39,17 +39,22 @@ public class Clementine {
         ui = new UI();
         storage = new Storage(filePath);
         commandProcessor = new CommandProcessor(ui, storage);
+
+        assert ui != null : "UI should be initialised";
+        assert storage != null : "Storage should be initialised";
     }
 
     private void loadTasksFromStorage() {
         try {
             ArrayList<String> fileLines = storage.load();
+            assert fileLines != null : "Storage.load() should return non-null list";
             ArrayList<Task> parsedTasks = parseTasksFromLines(fileLines);
             tasks = new TaskList(parsedTasks);
         } catch (ClementineException e) {
             ui.showLoadingError(e.getMessage());
             tasks = new TaskList();
         }
+        assert tasks != null : "TaskList should be initialised (either loaded or empty)";
     }
 
     private ArrayList<Task> parseTasksFromLines(ArrayList<String> fileLines) throws ClementineException {
@@ -114,8 +119,11 @@ public class Clementine {
      * @param args command line arguments (not used)
      */
     public static void main(String[] args) {
+        assert args != null : "Command line arguments should not be null";
         try {
-            new Clementine("./data/clementine.txt").run();
+            Clementine app = new Clementine("./data/clementine.txt");
+            assert app != null : "Clementine instance should be created";
+            app.run();
         } catch (ClementineException e) {
             System.out.println("quack! something went wrong: " + e.getMessage());
         }

@@ -19,7 +19,9 @@ public class TaskList {
      * @param tasks an ArrayList of Task objects to initialise the TaskList with
      */
     public TaskList(ArrayList<Task> tasks) {
+        assert tasks != null : "Tasks list should not be null";
         this.tasks = tasks;
+        assert this.tasks != null : "TaskList should have initialised tasks";
     }
 
     /**
@@ -55,7 +57,9 @@ public class TaskList {
         if (index < 1 || index > tasks.size()) {
             throw new ClementineException("invalid task number!");
         }
-        return tasks.get(index - 1);
+        Task result = tasks.get(index - 1);
+        assert result != null : "Retrieved task should not be null";
+        return result;
     }
 
     /**
@@ -77,7 +81,10 @@ public class TaskList {
             throw new ClementineException("oh quack! the task list is full,"
                     + "please complete some tasks before adding extra!");
         }
+        int sizeBefore = tasks.size();
         tasks.add(task);
+        assert tasks.size() == sizeBefore + 1 : "Task list size should increase by 1";
+        assert tasks.contains(task) : "Added task should be in the list";
     }
 
     /**
@@ -94,7 +101,10 @@ public class TaskList {
             throw new ClementineException("invalid task number!");
         }
 
-        tasks.get(index - 1).taskDone();
+        Task taskToMark = tasks.get(index - 1);
+        assert taskToMark != null : "Task to mark should not be null";
+        taskToMark.taskDone();
+        assert taskToMark.isDone() : "Task should be marked as done after marking";
     }
 
     /**
@@ -128,7 +138,10 @@ public class TaskList {
             throw new ClementineException("invalid task number");
         }
 
+        int sizeBefore = tasks.size();
         tasks.remove(index - 1);
+
+        assert tasks.size() == sizeBefore - 1 : "Task list size should decrease by 1";
     }
 
     /**

@@ -25,6 +25,7 @@ public class Storage {
      */
     public Storage(String filePath) {
         this.filePath = filePath;
+        assert this.filePath != null : "File path should be initialised";
     }
 
     /**
@@ -55,6 +56,7 @@ public class Storage {
         } catch (Exception e) {
             throw new ClementineException("quack! error loading tasks: " + e.getMessage());
         }
+        assert lines != null : "Loaded lines should not be null";
         return lines;
     }
 

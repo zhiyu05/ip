@@ -15,6 +15,8 @@ public class Task {
      */
     public Task(String description) {
         this.description = description;
+        assert description != null && !description.trim().isEmpty()
+                : "Task description cannot be null or empty";
         this.isDone = false;
     }
 
@@ -57,6 +59,7 @@ public class Task {
      */
     public void taskDone() {
         this.isDone = true;
+        assert this.isDone : "Task should be marked as done after calling taskDone()";
     }
 
     /**
@@ -64,6 +67,7 @@ public class Task {
      */
     public void taskUndone() {
         this.isDone = false;
+        assert !this.isDone : "Task should be marked as undone after calling taskUndone()";
     }
 
     /**
