@@ -82,19 +82,19 @@ public class UI {
      * @param totalTasks the total number of tasks after adding this task
      * @param taskType the type of task ("deadline", "event" or "todo")
      */
-    public String showTaskAdded(Task task, int totalTasks, String taskType) {
+    public String showTaskAdded(Task task, int totalTasks, CommandType taskType) {
         showLine();
         String response = "";
         switch(taskType) {
-        case "deadline":
+        case DEADLINE:
             System.out.println("okay! ive added the deadline task quack!");
             response = "okay! ive added the deadline task quack!";
             break;
-        case "event":
+        case EVENT:
             System.out.println("okay! ive added the event task for u! quack!");
             response = "okay! ive added the event task for u! quack!";
             break;
-        case "todo":
+        case TODO:
         default:
             System.out.println("okay! ive added the task quack!");
             response = "okay! ive added the task quack!";

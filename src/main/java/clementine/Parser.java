@@ -19,36 +19,13 @@ import clementine.task.Todo;
  */
 public class Parser {
 
-    /**
-     * Determines the command type from user input.
-     * Recognises commands: list, mark, unmark, event, deadline, todo, delete.
-     *
-     * @param input the user's input string
-     * @return the command type as a String
-     * @throws ClementineException if the input is empty or contains an unrecognised command
-     */
-    public static String getCommandType(String input) throws ClementineException {
-        if (input.isEmpty()) {
-            throw new ClementineException("oh quack! i cant read empty commands!");
-        } else if (input.equals("list")) {
-            return "list";
-        } else if (input.startsWith("mark")) {
-            return "mark";
-        } else if (input.startsWith("unmark")) {
-            return "unmark";
-        } else if (input.startsWith("event")) {
-            return "event";
-        } else if (input.startsWith("deadline")) {
-            return "deadline";
-        } else if (input.startsWith("todo")) {
-            return "todo";
-        } else if (input.startsWith("delete")) {
-            return "delete";
-        } else if (input.startsWith("find")) {
-            return "find";
-        } else {
-            throw new ClementineException("quack quack! i don't recognise this word!");
+    public static CommandType getCommandType(String input) throws ClementineException {
+        if (input == null || input.trim().isEmpty()) {
+            throw new ClementineException("oh quack! i can't read empty commands!");
         }
+
+        String commandWord = input.trim().split(" ")[0];
+        return CommandType.fromString(commandWord);
     }
 
     /**
