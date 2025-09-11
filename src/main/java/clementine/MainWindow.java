@@ -23,7 +23,7 @@ public class MainWindow extends AnchorPane {
     private Clementine clementine;
 
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/user.jpeg"));
-    private Image dukeImage = new Image(this.getClass().getResourceAsStream("/images/clementine.jpeg"));
+    private Image clementineImage = new Image(this.getClass().getResourceAsStream("/images/clementine.jpeg"));
 
     @FXML
     public void initialize() {
@@ -32,7 +32,10 @@ public class MainWindow extends AnchorPane {
 
     /** Injects the Clementine instance */
     public void setClementine(Clementine c) {
-        clementine = c;
+        this.clementine = c;
+
+        String introMessage = clementine.getUI().showIntro();
+        dialogContainer.getChildren().add(DialogBox.getClementineDialog(introMessage, clementineImage));
     }
 
     /**
@@ -45,7 +48,7 @@ public class MainWindow extends AnchorPane {
         String response = clementine.getResponse(input);
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getClementineDialog(response, dukeImage)
+                DialogBox.getClementineDialog(response, clementineImage)
         );
         userInput.clear();
     }

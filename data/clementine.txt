@@ -3,4 +3,5 @@ T | 0 | hello
 T | 0 | finish implementing gui
 T | 0 | finish lsm reading
 T | 0 | finish 2100 videos
-E | 0 | go make brackelets with gwyneth | /from 04/09/2025 0000/to 04/09/2025 0000
+E | 1 | go make brackelets with gwyneth | /from 04/09/2025 0000/to 04/09/2025 0000
+D | 0 | finsih ip project | /by 12/09/2025 1600
