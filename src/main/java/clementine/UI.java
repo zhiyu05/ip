@@ -20,6 +20,7 @@ public class UI {
      */
     public UI() {
         scanner = new Scanner(System.in);
+        assert scanner != null : "Scanner should be initialised";
     }
 
     /**

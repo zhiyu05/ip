@@ -64,8 +64,11 @@ public class Parser {
         }
 
         String taskType = parts[0];
+        assert taskType != null : "Task type should not be null";
         int isDone = Integer.parseInt(parts[1]);
+        assert isDone == 0 || isDone == 1 : "isDone should be 0 or 1";
         String description = parts[2];
+        assert description != null : "Task description should not be null";
 
         Task task = null;
 
@@ -103,6 +106,8 @@ public class Parser {
         }
 
         if (task != null && isDone == 1) {
+            assert task.getDescription() != null : "Created task should have description";
+            assert task.isDone() : "Task should be marked as done if isDone was 1";
             task.taskDone();
         }
         return task;
@@ -118,7 +123,9 @@ public class Parser {
     public static int parseTaskNumber(String input, String commandType) throws ClementineException {
         try {
             String numberPart = input.substring(commandType.length()).trim();
-            return Integer.parseInt(numberPart);
+            int result = Integer.parseInt(numberPart);
+            assert result > 0 : "Parsed task number should be positive";
+            return result;
         } catch (NumberFormatException e) {
             throw new ClementineException("please provide a valid number!");
         }
