@@ -73,7 +73,7 @@ public class Clementine {
         String trimmedInput = input.trim();
 
         if (isByeCommand(trimmedInput)) {
-            return "Bye! Hope to see u again soon!";
+            return "Bye! Hope to see u again soon! •᷄ɞ•";
         }
         return processCommand(trimmedInput);
     }
