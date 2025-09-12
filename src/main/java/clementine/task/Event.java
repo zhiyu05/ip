@@ -3,6 +3,7 @@ package clementine.task;
 import java.time.LocalDateTime;
 
 import clementine.Parser;
+import clementine.Priority;
 
 /**
  * Represents a task with a specific start and end time in the Clementine task management application.
@@ -27,6 +28,11 @@ public class Event extends Task {
         this.end = end;
     }
 
+    public Event(String description, LocalDateTime start, LocalDateTime end, Priority priority) {
+        super(description, priority);
+        this.start = start;
+        this.end = end;
+    }
     /**
      * Returns a string representation of the event task for display to users.
      * Formats both start and end times in a user-friendly format.
@@ -48,6 +54,10 @@ public class Event extends Task {
     public String storeData() {
         String started = Parser.formatDateTimeForStorage(this.start);
         String ended = Parser.formatDateTimeForStorage(this.end);
-        return "E | " + super.storeData() + " | /from " + started + "/to " + ended;
+        if (hasPriority()) {
+            return "E | " + super.storeData() + " | /from " + started + "/to " + ended + " | " + getPriority().getLevel();
+        } else {
+            return "E | " + super.storeData() + " | /from " + started + "/to " + ended;
+        }
     }
 }

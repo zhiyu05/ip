@@ -1,10 +1,5 @@
-T | 1 | finish ip project
-T | 1 | hello
 T | 1 | finish implementing gui
-T | 1 | finish lsm reading
+T | 0 | finish lsm reading
 T | 0 | finish 2100 videos
-<<<<<<< HEAD
 E | 1 | go make brackelets with gwyneth | /from 04/09/2025 0000/to 04/09/2025 0000
 D | 0 | finsih ip project | /by 12/09/2025 1600
-=======
->>>>>>> master

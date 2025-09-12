@@ -8,7 +8,8 @@ public enum CommandType {
     DEADLINE,
     EVENT,
     DELETE,
-    FIND;
+    FIND,
+    PRIORITY;
 
     public static CommandType fromString(String command) throws ClementineException {
         switch (command.toLowerCase()) {
@@ -28,6 +29,8 @@ public enum CommandType {
             return DELETE;
         case "find":
             return FIND;
+        case "priority":
+            return PRIORITY;
         default:
             throw new ClementineException("quack quack! i don't recognise this word!");
         }

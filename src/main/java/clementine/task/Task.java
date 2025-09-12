@@ -1,5 +1,7 @@
 package clementine.task;
 
+import clementine.Priority;
+
 /**
  * Represents a generic task with a description and a completion status.
  * @author zhiyu
@@ -7,6 +9,7 @@ package clementine.task;
 public class Task {
     protected String description;
     protected boolean isDone;
+    private Priority priority;
 
     /**
      * Constructs a new Task with the specified description.
@@ -18,8 +21,25 @@ public class Task {
         assert description != null && !description.trim().isEmpty()
                 : "Task description cannot be null or empty";
         this.isDone = false;
+        this.priority = null;
     }
 
+    public Task(String description, Priority priority) {
+        this.description = description;
+        this.priority = priority;
+    }
+
+    public Priority getPriority() {
+        return this.priority;
+    }
+
+    public void setPriority(Priority priority) {
+        this.priority = priority;
+    }
+
+    public boolean hasPriority() {
+        return priority != null;
+    }
     /**
      * Returns the status icon for display purposes.
      * @return "X" if the task is completed, " " (space) if not completed
@@ -76,6 +96,7 @@ public class Task {
      * @return a formatted string for storage in the format "completion_status | description"
      */
     public String storeData() {
+        String data = getCompletion() + " | " + this.description;
         return getCompletion() + " | " + this.description;
     }
 

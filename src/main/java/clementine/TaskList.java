@@ -161,4 +161,13 @@ public class TaskList {
 
         return matchingTasks;
     }
+
+    public ArrayList<Task> getTasksByPriority() {
+        ArrayList<Task> result = new ArrayList<>();
+        tasks.stream()
+                .filter(Task::hasPriority)
+                .sorted((t1, t2) -> Integer.compare(t1.getPriority().getLevel(), t2.getPriority().getLevel()))
+                .forEach(result::add);
+        return result;
+    }
 }

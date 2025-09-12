@@ -203,4 +203,22 @@ public class UI {
             return response;
         }
     }
+
+    public String showPriorityTasks(ArrayList<Task> tasks) {
+        if (tasks.isEmpty()) {
+            showLine();
+            System.out.println("oh quack! no tasks with priority!");
+            showLine();
+            return "oh quack! no tasks with priority!";
+        } else {
+            String response = "quack! here's the priority list:\n";
+            for (int i = 0; i < tasks.size(); i++) {
+                response += "[" + (i + 1) + "]" + tasks.get(i).toString() + "\n";
+            }
+            showLine();
+            System.out.println(response);
+            showLine();
+            return response;
+        }
+    }
 }

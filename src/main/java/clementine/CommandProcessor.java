@@ -30,6 +30,8 @@ public class CommandProcessor {
         case DEADLINE:
         case TODO:
             return handleAddTaskCommand(command, input, tasks);
+        case PRIORITY:
+            return handlePriorityCommand(tasks);
         default:
             return ui.showError("oh quack! i don't understand this command!");
         }
@@ -92,5 +94,9 @@ public class CommandProcessor {
 
     private void saveTasksToStorage(TaskList tasks) throws ClementineException {
         storage.save(tasks.getTaskList());
+    }
+
+    private String handlePriorityCommand(TaskList tasks) {
+        return ui.showPriorityTasks(tasks.getTasksByPriority());
     }
 }

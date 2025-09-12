@@ -28,6 +28,23 @@ public class Parser {
         return CommandType.fromString(commandWord);
     }
 
+    public static Priority parsePriority(String input) throws ClementineException {
+        if (input.contains("/priority")) {
+            String[] parts = input.split("/priority", 2);
+            String numberPart = parts[1].trim();
+            try {
+                int level = Integer.parseInt(numberPart);
+                if (level < 1) {
+                    throw new ClementineException("Priority must be a positive number!");
+                }
+                return new Priority(level);
+            } catch (NumberFormatException e) {
+                throw new ClementineException("Please provide a valid numberic priority");
+            }
+        }
+        return null;
+    }
+
     /**
      * Parses a stored task line and reconstructs the corresponding Task object.
      * Handles Todo, Deadline, and Event task types from their stored format.
@@ -123,28 +140,31 @@ public class Parser {
             throw new ClementineException("quack! please use the format: deadline <description> /by <date>");
         }
         String[] parts = input.split("/by", 2);
-
-        if (parts.length == 2) {
-            String description = parts[0].substring(9).trim();
-            String deadline = parts[1].trim();
-
-            if (description.isEmpty()) {
-                throw new ClementineException("the description of a deadline cannot be empty");
-            }
-
-            if (deadline.isEmpty()) {
-                throw new ClementineException("the deadline date cannot be empty!");
-            }
-
-            try {
-                LocalDateTime deadlineTime = parseDateTime(deadline);
-                return new Deadline(description, deadlineTime);
-            } catch (DateTimeParseException e) {
-                throw new ClementineException("quack!" + e.getMessage());
-            }
-
-        } else {
+        if (parts.length < 2) {
             throw new ClementineException("quack! please use the format: deadline <description> /by <date>");
+        }
+
+        String description = parts[0].substring(9).trim();
+        String deadlineStr = parts[1].split("/priority", 2)[0].trim();
+
+        if (description.isEmpty()) {
+            throw new ClementineException("the description of a deadline cannot be empty");
+        }
+
+        if (deadlineStr.isEmpty()) {
+            throw new ClementineException("the deadline date cannot be empty!");
+        }
+
+        try {
+            LocalDateTime deadlineTime = parseDateTime(deadlineStr);
+            Priority priority = parsePriority(input);
+            if (priority != null) {
+                return new Deadline(description, deadlineTime, priority);
+            } else {
+                return new Deadline(description, deadlineTime);
+            }
+        } catch (DateTimeParseException e) {
+            throw new ClementineException("quack!" + e.getMessage());
         }
     }
 
@@ -179,7 +199,8 @@ public class Parser {
         }
 
         String startTime = timeline[0].trim();
-        String endTime = timeline[1].trim();
+        // String endTime = timeline[1].trim();
+        String endTime = timeline[1].split("/priority", 2)[0].trim();
 
         if (startTime.isEmpty() || endTime.isEmpty()) {
             throw new ClementineException("both start time and end time must be specified!");
@@ -188,7 +209,12 @@ public class Parser {
         try {
             LocalDateTime start = parseDateTime(startTime);
             LocalDateTime end = parseDateTime(endTime);
-            return new Event(description, start, end);
+            Priority priority = Parser.parsePriority(input);
+            if (priority != null) {
+                return new Event(description, start, end, priority);
+            } else {
+                return new Event(description, start, end);
+            }
         } catch (DateTimeParseException e) {
             throw new ClementineException("quack! invalid date/time format");
         }
@@ -206,12 +232,17 @@ public class Parser {
             throw new ClementineException("quack! the description of a todo cannot be empty!");
         }
 
-        String cleanDescription = input.substring(5).trim();
+        String[] parts = input.split("/priority", 2);
+        String cleanDescription = parts[0].substring(5).trim();
         if (cleanDescription.isEmpty()) {
             throw new ClementineException("quack! the description of a todo cannot be empty!");
         }
-
-        return new Todo(cleanDescription);
+        Priority priority = parsePriority(input);
+        if (priority != null) {
+            return new Todo(cleanDescription, priority);
+        } else {
+            return new Todo(cleanDescription);
+        }
     }
 
     /**

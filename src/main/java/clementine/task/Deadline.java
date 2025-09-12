@@ -3,6 +3,7 @@ package clementine.task;
 import java.time.LocalDateTime;
 
 import clementine.Parser;
+import clementine.Priority;
 
 /**
  * Represents a task with a deadline in the Clementine task management application.
@@ -21,6 +22,11 @@ public class Deadline extends Task {
      */
     public Deadline(String description, LocalDateTime by) {
         super(description);
+        this.by = by;
+    }
+
+    public Deadline(String description, LocalDateTime by, Priority priority) {
+        super(description, priority);
         this.by = by;
     }
 
@@ -43,6 +49,10 @@ public class Deadline extends Task {
     @Override
     public String storeData() {
         String dateString = Parser.formatDateTimeForStorage(by);
-        return "D | " + super.storeData() + " | /by " + dateString;
+        if (hasPriority()) {
+            return "D | " + super.storeData() + " | /by " + dateString + " | " + getPriority().getLevel();
+        } else {
+            return "D | " + super.storeData() + " | /by " + dateString;
+        }
     }
 }

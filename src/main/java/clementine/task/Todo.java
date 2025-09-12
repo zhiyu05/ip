@@ -1,5 +1,7 @@
 package clementine.task;
 
+import clementine.Priority;
+
 /**
  * Represents a simple todo task without any time constraints.
  * A Todo is the most basic type of task, containing only a description and completion status.
@@ -14,6 +16,10 @@ public class Todo extends Task {
      */
     public Todo(String description) {
         super(description);
+    }
+
+    public Todo(String description, Priority priority) {
+        super(description, priority);
     }
 
     /**
@@ -33,6 +39,10 @@ public class Todo extends Task {
      */
     @Override
     public String storeData() {
-        return "T | " + super.storeData();
+        if (hasPriority()) {
+            return "T | " + super.storeData() + " | " + getPriority().getLevel();
+        } else {
+            return "T | " + super.storeData();
+        }
     }
 }
