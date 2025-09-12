@@ -66,16 +66,30 @@ public class Parser {
 
         Task task = null;
 
+        Priority priority = null;
+        if (parts.length > 3) {
+            String last = parts[parts.length - 1].trim();
+            try {
+                int level = Integer.parseInt(last);
+                if (level > 0) {
+                    priority = new Priority(level);
+                }
+            } catch (NumberFormatException e) {
+                // ignore invalid stored priority
+            }
+        }
+
         switch (taskType) {
         case "T":
-            task = new Todo(description);
+            task = (priority != null) ? new Todo(description, priority) : new Todo(description);
             break;
 
         case "D":
             if (parts.length >= 4) {
                 String deadline = parts[3].replace("/by ", "");
                 LocalDateTime timeDeadline = parseDateTime(deadline);
-                task = new Deadline(description, timeDeadline);
+                task = (priority != null) ? new Deadline(description, timeDeadline, priority)
+                                        : new Deadline(description, timeDeadline);
             }
             break;
 
@@ -90,7 +104,8 @@ public class Parser {
                         LocalDateTime start = parseDateTime(startTime);
                         String endTime = timeParts[1].trim();
                         LocalDateTime end = parseDateTime(endTime);
-                        task = new Event(description, start, end);
+                        task = (priority != null) ? new Event(description, start, end, priority)
+                                                : new Event(description, start, end);
                     }
                 }
             }
