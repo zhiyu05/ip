@@ -29,7 +29,7 @@ public class UI {
      * @return the intro message
      */
     public String showIntro() {
-        String response = "Quack! I'm clementine\n What can i help you with today?\n";
+        String response = "Quack! I'm clementine\n What can i help you with today?\n ( •з• )";
         showLine();
         System.out.println(response);
         showLine();
