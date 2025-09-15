@@ -24,7 +24,7 @@ public class Parser {
             throw new ClementineException("oh quack! i can't read empty commands!");
         }
 
-        String commandWord = input.trim().split(" ")[0];
+        String commandWord = input.trim().split(" ")[0].toLowerCase();
         return CommandType.fromString(commandWord);
     }
 
@@ -116,8 +116,8 @@ public class Parser {
 
         if (task != null && isDone == 1) {
             assert task.getDescription() != null : "Created task should have description";
-            assert task.isDone() : "Task should be marked as done if isDone was 1";
             task.taskDone();
+            assert task.isDone() : "Task should be marked as done if isDone was 1";
         }
         return task;
     }
