@@ -41,7 +41,7 @@ public class UI {
      * Shows a goodbye message to the user.
      */
     public String showOutro() {
-        String response = "Bye! quack u later! hope you have a great day!";
+        String response = "Bye! quack u later! hope you have a great day! •᷄ɞ•";
         showLine();
         System.out.println(response);
         showLine();
@@ -128,10 +128,10 @@ public class UI {
      */
     public String showMarkedTask(Task task) {
         showLine();
-        System.out.println("good job! you've completed the task");
+        System.out.println("good job! you've completed the task! quack!");
         System.out.println(" " + task.toString());
         showLine();
-        return "good job! you've completed the task" + "\n" + " " + task.toString();
+        return "good job! you've completed the task! quack!" + "\n" + " " + task.toString();
     }
 
     /**
