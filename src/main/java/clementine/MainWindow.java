@@ -1,5 +1,7 @@
 package clementine;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,6 +9,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
+
 /**
  * Controller for the main GUI.
  */
@@ -51,6 +55,13 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getClementineDialog(response, clementineImage)
         );
         userInput.clear();
+
+        if (input.trim().equalsIgnoreCase("bye")) {
+            // give the UI a moment to show the bye message before exiting
+            PauseTransition delay = new PauseTransition(Duration.seconds(1.3));
+            delay.setOnFinished(event -> Platform.exit());
+            delay.play();
+        }
     }
 }
 
