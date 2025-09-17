@@ -29,7 +29,7 @@ public class UI {
      * @return the intro message
      */
     public String showIntro() {
-        String response = "Quack! I'm clementine\n What can i help you with today?\n ( •з• )";
+        String response = "quack! i'm clementine\n what can i help you with today?\n ( •з• )";
         showLine();
         System.out.println(response);
         showLine();
@@ -41,7 +41,7 @@ public class UI {
      * Shows a goodbye message to the user.
      */
     public String showOutro() {
-        String response = "Bye! quack u later! hope you have a great day! •᷄ɞ•";
+        String response = "bye! quack u later! hope you have a great day! •᷄ɞ•";
         showLine();
         System.out.println(response);
         showLine();
