@@ -162,6 +162,13 @@ public class TaskList {
         return matchingTasks;
     }
 
+    /**
+     * Returns all tasks that have priority assignments, sorted by priority level in ascending order.
+     * Tasks with lower priority numbers appear first in the returned list.
+     * Only tasks that have a priority assigned are included in the result.
+     *
+     * @return an ArrayList of tasks with priorities, sorted by priority level (lowest first)
+     */
     public ArrayList<Task> getTasksByPriority() {
         ArrayList<Task> result = new ArrayList<>();
         tasks.stream()

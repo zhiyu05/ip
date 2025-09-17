@@ -20,7 +20,7 @@ public class Storage {
     private String filePath;
 
     /**
-     * Constructs a Stroage object with the specified file path.
+     * Constructs a Storage object with the specified file path.
      * @param filePath the path to the file where tasks will be stored
      */
     public Storage(String filePath) {

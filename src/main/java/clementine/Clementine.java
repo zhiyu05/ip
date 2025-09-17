@@ -31,10 +31,22 @@ public class Clementine {
         loadTasksFromStorage();
     }
 
+    /**
+     * Returns the UI component of this Clementine instance.
+     * Provides access to the user interface for external components that need to interact with it.
+     *
+     * @return the UI object used by this Clementine instance
+     */
     public UI getUI() {
         return this.ui;
     }
 
+    /**
+     * Initializes all core components of the Clementine application.
+     * Creates instances of UI, Storage, and CommandProcessor with the specified file path.
+     *
+     * @param filePath the path to the file where tasks will be stored
+     */
     private void initialiseComponents(String filePath) {
         ui = new UI();
         storage = new Storage(filePath);
@@ -44,6 +56,11 @@ public class Clementine {
         assert storage != null : "Storage should be initialised";
     }
 
+    /**
+     * Loads existing tasks from storage and initializes the task list.
+     * If loading fails due to file issues or parsing errors, creates an empty task list
+     * and displays an error message to the user.
+     */
     private void loadTasksFromStorage() {
         try {
             ArrayList<String> fileLines = storage.load();
@@ -57,6 +74,14 @@ public class Clementine {
         assert tasks != null : "TaskList should be initialised (either loaded or empty)";
     }
 
+    /**
+     * Parses raw file lines into Task objects.
+     * Converts each line from storage into the appropriate Task type using the Parser.
+     *
+     * @param fileLines the list of raw task data lines from storage
+     * @return an ArrayList of parsed Task objects
+     * @throws ClementineException if any line cannot be parsed into a valid task
+     */
     private ArrayList<Task> parseTasksFromLines(ArrayList<String> fileLines) throws ClementineException {
         ArrayList<Task> parsedTasks = new ArrayList<>();
         for (String line : fileLines) {
@@ -64,6 +89,15 @@ public class Clementine {
         }
         return parsedTasks;
     }
+
+    /**
+     * Processes user input and returns an appropriate response.
+     * Validates the input, handles special commands like "bye", and delegates
+     * other commands to the CommandProcessor for execution.
+     *
+     * @param input the user's command input
+     * @return a response string to be displayed to the user
+     */
 
     public String getResponse(String input) {
         if (!isValidInput(input)) {
@@ -78,14 +112,35 @@ public class Clementine {
         return processCommand(trimmedInput);
     }
 
+    /**
+     * Validates whether the user input is acceptable for processing.
+     * Checks that input is not null and contains non-whitespace characters.
+     *
+     * @param input the user input to validate
+     * @return true if input is valid, false if null or empty/whitespace-only
+     */
     private boolean isValidInput(String input) {
         return input != null && !input.trim().isEmpty();
     }
 
+    /**
+     * Checks if the given input is the "bye" command to exit the application.
+     *
+     * @param input the trimmed user input to check
+     * @return true if the input equals "bye", false otherwise
+     */
     private boolean isByeCommand(String input) {
         return input.equals("bye");
     }
 
+    /**
+     * Processes a valid command through the CommandProcessor.
+     * Handles any exceptions that occur during command execution and
+     * returns appropriate error messages to the user.
+     *
+     * @param input the validated and trimmed user command
+     * @return the response from command execution or an error message
+     */
     private String processCommand(String input) {
         try {
             return commandProcessor.executeCommand(input, tasks);
@@ -94,6 +149,13 @@ public class Clementine {
         }
     }
 
+    /**
+     * Runs the main application loop for console-based interaction.
+     * Displays the introduction, continuously reads user commands,
+     * and processes them until the user enters "bye" to exit.
+     *
+     * @throws ClementineException if a critical error occurs during application execution
+     */
     public void run() throws ClementineException {
         ui.showIntro();
         while (true) {

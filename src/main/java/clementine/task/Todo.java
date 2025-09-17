@@ -18,6 +18,12 @@ public class Todo extends Task {
         super(description);
     }
 
+    /**
+     * Constructs a new Todo task with the specified description and priority.
+     *
+     * @param description the description of the todo task
+     * @param priority the priority level for this todo task
+     */
     public Todo(String description, Priority priority) {
         super(description, priority);
     }

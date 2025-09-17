@@ -19,6 +19,14 @@ import clementine.task.Todo;
  */
 public class Parser {
 
+    /**
+     * Extracts and parses the command type from user input.
+     * Takes the first word of the input, converts it to lowercase, and maps it to the corresponding CommandType enum.
+     *
+     * @param input the full user input string
+     * @return the CommandType enum corresponding to the command
+     * @throws ClementineException if the input is null, empty, or contains an unrecognized command
+     */
     public static CommandType getCommandType(String input) throws ClementineException {
         if (input == null || input.trim().isEmpty()) {
             throw new ClementineException("oh quack! i can't read empty commands!");
@@ -28,6 +36,15 @@ public class Parser {
         return CommandType.fromString(commandWord);
     }
 
+    /**
+     * Parses and extracts priority information from user input.
+     * Looks for the "/priority" keyword followed by a numeric priority level.
+     * The priority level must be a positive integer.
+     *
+     * @param input the user input string that may contain priority information
+     * @return a Priority object if priority is specified, null if no priority is found
+     * @throws ClementineException if the priority format is invalid or the priority level is not a positive number
+     */
     public static Priority parsePriority(String input) throws ClementineException {
         if (input.contains("/priority")) {
             String[] parts = input.split("/priority", 2);

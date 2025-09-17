@@ -25,6 +25,13 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    /**
+     * Constructs a new Deadline task with the specified description, due date, and priority.
+     *
+     * @param description the description of the task
+     * @param by the deadline date and time for this task
+     * @param priority the priority level for this deadline task
+     */
     public Deadline(String description, LocalDateTime by, Priority priority) {
         super(description, priority);
         this.by = by;

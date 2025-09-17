@@ -24,19 +24,41 @@ public class Task {
         this.priority = null;
     }
 
+    /**
+     * Constructs a new Task with the specified description and priority.
+     * Tasks are initialised as not completed by default.
+     *
+     * @param description the description of the task
+     * @param priority the priority level for this task
+     */
     public Task(String description, Priority priority) {
         this.description = description;
         this.priority = priority;
     }
 
+    /**
+     * Returns the priority of this task.
+     *
+     * @return the Priority object, or null if no priority is set
+     */
     public Priority getPriority() {
         return this.priority;
     }
 
+    /**
+     * Sets the priority for this task.
+     *
+     * @param priority the Priority object to assign to this task
+     */
     public void setPriority(Priority priority) {
         this.priority = priority;
     }
 
+    /**
+     * Checks whether this task has a priority assigned.
+     *
+     * @return true if the task has a priority, false otherwise
+     */
     public boolean hasPriority() {
         return priority != null;
     }

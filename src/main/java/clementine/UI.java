@@ -204,6 +204,13 @@ public class UI {
         }
     }
 
+    /**
+     * Displays a list of tasks that have priority assignments, sorted by priority level.
+     * Shows tasks in ascending order of priority (lower numbers first).
+     *
+     * @param tasks the list of priority tasks to display
+     * @return a formatted string showing the priority tasks or a message if none exist
+     */
     public String showPriorityTasks(ArrayList<Task> tasks) {
         if (tasks.isEmpty()) {
             showLine();

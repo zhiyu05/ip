@@ -28,6 +28,14 @@ public class Event extends Task {
         this.end = end;
     }
 
+    /**
+     * Constructs a new Event task with the specified description, time range, and priority.
+     *
+     * @param description the description of the event
+     * @param start the start date and time of the event
+     * @param end the end date and time of the event
+     * @param priority the priority level for this event task
+     */
     public Event(String description, LocalDateTime start, LocalDateTime end, Priority priority) {
         super(description, priority);
         this.start = start;
@@ -55,7 +63,8 @@ public class Event extends Task {
         String started = Parser.formatDateTimeForStorage(this.start);
         String ended = Parser.formatDateTimeForStorage(this.end);
         if (hasPriority()) {
-            return "E | " + super.storeData() + " | /from " + started + "/to " + ended + " | " + getPriority().getLevel();
+            return "E | " + super.storeData() + " | /from " + started + "/to " + ended + " | "
+                    + getPriority().getLevel();
         } else {
             return "E | " + super.storeData() + " | /from " + started + "/to " + ended;
         }
