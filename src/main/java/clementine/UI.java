@@ -112,9 +112,14 @@ public class UI {
      * @param tasks an ArrayList of Task objects to display
      */
     public String showTaskList(ArrayList<Task> tasks) {
-        String response = "tasks to be done before freedom: ( •᷄ɞ•᷅ )\n";
-        for (int i = 0; i < tasks.size(); i++) {
-            response += (i + 1) + ". " + tasks.get(i).toString() + "\n";
+        String response = "";
+        if (tasks.isEmpty()) {
+            response = "yay! u have no tasks right now :)";
+        } else {
+            response = "tasks to be done before freedom: ( •᷄ɞ•᷅ )\n";
+            for (int i = 0; i < tasks.size(); i++) {
+                response += (i + 1) + ". " + tasks.get(i).toString() + "\n";
+            }
         }
         showLine();
         System.out.println(response);
